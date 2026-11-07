@@ -560,9 +560,14 @@
         $("confirmBtn").addEventListener("click", (e)=>{
           if(document.body.classList.contains("editor-on")) return;
           e.preventDefault(); e.stopPropagation();
-          const num = (C.whatsapp.numero || "").replace(/\D/g,"");
-          const msg = encodeURIComponent(C.whatsapp.mensagem || "");
-          window.open("https://wa.me/" + num + "?text=" + msg, "_blank");
+          const destino = String(C.whatsapp.numero || "").trim();
+          if (/^https?:\/\//i.test(destino)) {
+            window.open(destino, "_blank", "noopener,noreferrer");
+          } else {
+            const num = destino.replace(/\D/g, "");
+            const msg = encodeURIComponent(C.whatsapp.mensagem || "");
+            if (num) window.open("https://wa.me/" + num + "?text=" + msg, "_blank", "noopener,noreferrer");
+          }
         });
       }
       if(hasMap && $("mapBtn")){
